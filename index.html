@@ -5,16 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ELITE POLO</title>
   <style>
-    body { margin:0; font-family: Arial, sans-serif; background:#fff; color:#111;
-           display:flex; align-items:center; justify-content:center; min-height:100vh; text-align:center; }
-    h1 { letter-spacing:4px; font-size:32px; margin:0 0 8px; }
-    p { color:#777; margin:0; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family: Arial, sans-serif; background:#fff; color:#111; }
+    .promo { background:#111; color:#fff; text-align:center; font-size:13px; padding:8px; }
+    header { display:flex; justify-content:space-between; align-items:center;
+             padding:14px 16px; border-bottom:1px solid #eee; position:sticky; top:0; background:#fff; }
+    .logo { font-weight:bold; letter-spacing:4px; font-size:20px; }
+    .cart { font-size:14px; }
+    .hero { background:#f3f3f3; text-align:center; padding:56px 16px; }
+    .hero h2 { margin:0 0 8px; font-size:26px; }
+    .hero p { margin:0 0 20px; color:#666; }
+    .btn { display:inline-block; background:#111; color:#fff; padding:12px 28px; text-decoration:none; font-size:14px; }
+    .cats { display:flex; gap:8px; padding:16px; overflow-x:auto; }
+    .cats span { border:1px solid #ddd; padding:8px 16px; font-size:13px; white-space:nowrap; }
+    h3 { padding:0 16px; margin:8px 0 12px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px 32px; }
+    .img { background:#eee; aspect-ratio:3/4; }
+    .name { font-size:13px; margin:8px 0 2px; }
+    .price { font-size:14px; font-weight:bold; }
+    footer { background:#f3f3f3; text-align:center; padding:24px 16px; font-size:13px; color:#666; }
   </style>
 </head>
 <body>
-  <div>
-    <h1>ELITE POLO</h1>
-    <p>المتجر قريباً</p>
+  <div class="promo">الدفع عند الاستلام · التوصيل لكل الولايات</div>
+  <header>
+    <div class="logo">ELITE POLO</div>
+    <div class="cart">السلة (0)</div>
+  </header>
+
+  <section class="hero">
+    <h2>أناقة بسيطة. جودة تدوم.</h2>
+    <p>تشكيلة جديدة من القمصان والبولو</p>
+    <a class="btn" href="#products">تسوّق الآن</a>
+  </section>
+
+  <div class="cats">
+    <span>الكل</span><span>بولو</span><span>قمصان</span><span>تيشيرتات</span>
   </div>
+
+  <h3 id="products">وصل حديثاً</h3>
+  <div class="grid">
+    <div><div class="img"></div><div class="name">بولو كلاسيك أبيض</div><div class="price">3,500 دج</div></div>
+    <div><div class="img"></div><div class="name">بولو كلاسيك أسود</div><div class="price">3,500 دج</div></div>
+    <div><div class="img"></div><div class="name">قميص كلاسيك أزرق</div><div class="price">4,200 دج</div></div>
+    <div><div class="img"></div><div class="name">قميص كلاسيك رمادي</div><div class="price">4,200 دج</div></div>
+  </div>
+
+  <footer>© ELITE POLO — جميع الحقوق محفوظة</footer>
 </body>
 </html>
