@@ -8,14 +8,13 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#111}
 .promo{background:#111;color:#fff;text-align:center;font-size:13px;padding:8px}
-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:5}
-.logo{font-weight:bold;letter-spacing:4px;font-size:20px}
-.cartbtn{background:none;border:1px solid #111;padding:8px 14px;font-size:14px;cursor:pointer}
-.hero{background:#f3f3f3;text-align:center;padding:44px 16px}
-.hero h2{margin:0 0 8px;font-size:26px}
+.brand{background:#172038;text-align:center;padding:6px 0}
+.brand img{width:280px;max-width:90%;height:220px;object-fit:cover;object-position:center 47%;display:block;margin:0 auto}
+.hero{background:#f3f3f3;text-align:center;padding:32px 16px}
+.hero h2{margin:0 0 8px;font-size:24px}
 .hero p{margin:0;color:#666}
 h3{padding:0 16px;margin:24px 0 12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 32px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 32px;max-width:900px;margin:0 auto}
 .card img{width:100%;aspect-ratio:3/4;object-fit:cover;background:#eee;display:block}
 .name{font-size:13px;margin:8px 0 2px}
 .price{font-size:14px;font-weight:bold;margin-bottom:8px}
@@ -25,13 +24,16 @@ h3{padding:0 16px;margin:24px 0 12px}
 .add{width:100%;padding:11px;background:#111;color:#fff;border:0;font-size:13px;cursor:pointer}
 footer{background:#f3f3f3;text-align:center;padding:24px 16px;font-size:13px;color:#666}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20}
-.sheet{position:absolute;bottom:0;left:0;right:0;background:#fff;max-height:92vh;overflow:auto;padding:16px}
+.sheet{position:absolute;bottom:0;left:0;right:0;background:#fff;max-height:94vh;overflow:auto;padding:16px;max-width:600px;margin:0 auto}
 .sheet h4{margin:0 0 12px;font-size:18px}
 .close{float:left;background:none;border:0;font-size:22px;cursor:pointer}
-.item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding:10px 0;font-size:14px}
-.qty button{width:28px;height:28px;border:1px solid #ccc;background:#fff;font-size:16px}
+.sumrow{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid #eee}
+.qty button{width:28px;height:28px;border:1px solid #ccc;background:#fff;font-size:16px;cursor:pointer}
 .qty span{display:inline-block;min-width:24px;text-align:center}
-.total{font-weight:bold;margin:12px 0;font-size:16px}
+.total{display:flex;justify-content:space-between;font-weight:bold;font-size:17px;padding:12px 0}
+.opts{display:flex;gap:8px;margin:10px 0}
+.opt{flex:1;padding:12px 6px;border:1px solid #ccc;background:#fff;font-size:13px;cursor:pointer;line-height:1.5}
+.opt.on{background:#111;color:#fff;border-color:#111}
 input,select{width:100%;padding:12px;margin:0 0 10px;border:1px solid #ccc;font-size:15px;background:#fff}
 .confirm{width:100%;padding:14px;background:#111;color:#fff;border:0;font-size:15px;cursor:pointer}
 .note{font-size:12px;color:#777;margin:8px 0 0;text-align:center}
@@ -40,10 +42,7 @@ input,select{width:100%;padding:12px;margin:0 0 10px;border:1px solid #ccc;font-
 </head>
 <body>
 <div class="promo">الدفع عند الاستلام · التوصيل لكل الولايات</div>
-<header>
-  <div class="logo">ELITE POLO</div>
-  <button class="cartbtn" onclick="openCart()">السلة (<span id="count">0</span>)</button>
-</header>
+<div class="brand"><img src="FB_IMG_1794912391133.jpg" alt="ELITE POLO"></div>
 <section class="hero">
   <h2>أناقة بسيطة. جودة تدوم.</h2>
   <p>تشكيلة بولو جديدة</p>
@@ -54,18 +53,20 @@ input,select{width:100%;padding:12px;margin:0 0 10px;border:1px solid #ccc;font-
 
 <div class="overlay" id="overlay">
   <div class="sheet">
-    <button class="close" onclick="closeCart()">✕</button>
-    <h4>سلتك</h4>
-    <div id="items"></div>
-    <div class="total" id="total"></div>
-    <div id="formBox">
-      <input id="fname" placeholder="الاسم الكامل">
-      <input id="fphone" placeholder="رقم الهاتف (مثال: 0555123456)" inputmode="tel">
-      <select id="fwilaya"><option value="">اختر الولاية</option></select>
-      <input id="faddr" placeholder="العنوان الكامل / البلدية">
-      <button class="confirm" onclick="sendOrder()">تأكيد الطلب</button>
-      <p class="note">الدفع عند الاستلام. سيصلك تأكيد الطلب على واتساب.</p>
+    <button class="close" onclick="closeOrder()">✕</button>
+    <h4>إتمام الطلب</h4>
+    <div id="sum"></div>
+    <div style="font-size:14px;margin-top:10px">نوع التوصيل:</div>
+    <div class="opts">
+      <button class="opt" id="optOffice" onclick="setDelivery('office')">إلى المكتب<br>500 دج</button>
+      <button class="opt" id="optHome" onclick="setDelivery('home')">إلى المنزل<br>750 دج</button>
     </div>
+    <input id="fname" placeholder="الاسم الكامل">
+    <input id="fphone" placeholder="رقم الهاتف (مثال: 0555123456)" inputmode="tel">
+    <select id="fwilaya"><option value="">اختر الولاية</option></select>
+    <input id="faddr" placeholder="البلدية / العنوان">
+    <button class="confirm" onclick="sendOrder()">تأكيد الطلب</button>
+    <p class="note">الدفع عند الاستلام. سيصلك تأكيد الطلب على واتساب.</p>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -74,6 +75,7 @@ input,select{width:100%;padding:12px;margin:0 0 10px;border:1px solid #ccc;font-
 const WHATSAPP = "213772342854";
 const SHEETS_URL = "";
 const SIZES = ["S","M","L","XL"];
+const DELIVERY = {office:{label:"المكتب", cost:500}, home:{label:"المنزل", cost:750}};
 const PRODUCTS = [
   {id:1, name:"Polo Eden Park", img:"IMG_20261013_172028_828.jpg", price:5500},
   {id:2, name:"Polo Eden Park", img:"IMG_20261013_172029_114.jpg", price:5500},
@@ -82,14 +84,15 @@ const PRODUCTS = [
 ];
 const WILAYAS = ["أدرار","الشلف","الأغواط","أم البواقي","باتنة","بجاية","بسكرة","بشار","البليدة","البويرة","تمنراست","تبسة","تلمسان","تيارت","تيزي وزو","الجزائر","الجلفة","جيجل","سطيف","سعيدة","سكيكدة","سيدي بلعباس","عنابة","قالمة","قسنطينة","المدية","مستغانم","المسيلة","معسكر","ورقلة","وهران","البيض","إليزي","برج بوعريريج","بومرداس","الطارف","تندوف","تيسمسيلت","الوادي","خنشلة","سوق أهراس","تيبازة","ميلة","عين الدفلى","النعامة","عين تموشنت","غرداية","غليزان","تيميمون","برج باجي مختار","أولاد جلال","بني عباس","عين صالح","عين قزام","تقرت","جانت","المغير","المنيعة"];
 
-let cart = [];
 const sel = {};
+let cur = null;
+let deliv = "";
 const $ = id => document.getElementById(id);
 const fmt = n => n.toLocaleString("en-US") + " دج";
 
 function toast(msg){
   const t = $("toast"); t.textContent = msg; t.style.display = "block";
-  setTimeout(()=>{ t.style.display = "none"; }, 1800);
+  setTimeout(()=>{ t.style.display = "none"; }, 2000);
 }
 
 function renderProducts(){
@@ -101,76 +104,81 @@ function renderProducts(){
       <div class="sizes">
         ${SIZES.map(s => `<button class="sz ${sel[p.id]===s?"on":""}" onclick="pick(${p.id},'${s}')">${s}</button>`).join("")}
       </div>
-      <button class="add" onclick="addToCart(${p.id})">أضف إلى السلة</button>
+      <button class="add" onclick="openOrder(${p.id})">اطلب الآن</button>
     </div>`).join("");
 }
 
 function pick(id, s){ sel[id] = s; renderProducts(); }
 
-function addToCart(id){
+function openOrder(id){
   if(!sel[id]){ toast("اختر المقاس أولاً"); return; }
-  const found = cart.find(i => i.id===id && i.size===sel[id]);
-  if(found){ found.qty++; } else { cart.push({id:id, size:sel[id], qty:1}); }
-  updateCount(); toast("تمت الإضافة إلى السلة");
+  cur = {id:id, size:sel[id], qty:1};
+  deliv = "";
+  $("optOffice").className = "opt";
+  $("optHome").className = "opt";
+  $("faddr").placeholder = "البلدية / العنوان";
+  renderSummary();
+  $("overlay").style.display = "block";
 }
 
-function updateCount(){ $("count").textContent = cart.reduce((a,i)=>a+i.qty,0); }
+function closeOrder(){ $("overlay").style.display = "none"; }
 
-function changeQty(index, d){
-  cart[index].qty += d;
-  if(cart[index].qty <= 0){ cart.splice(index,1); }
-  updateCount(); renderCart();
+function setDelivery(d){
+  deliv = d;
+  $("optOffice").className = "opt" + (d==="office" ? " on" : "");
+  $("optHome").className = "opt" + (d==="home" ? " on" : "");
+  $("faddr").placeholder = d==="office" ? "اسم المكتب / البلدية" : "العنوان الكامل / البلدية";
+  renderSummary();
 }
 
-function total(){
-  return cart.reduce((a,i)=> a + PRODUCTS.find(p=>p.id===i.id).price * i.qty, 0);
+function changeQty(d){
+  cur.qty += d;
+  if(cur.qty < 1) cur.qty = 1;
+  if(cur.qty > 10) cur.qty = 10;
+  renderSummary();
 }
 
-function renderCart(){
-  if(cart.length === 0){
-    $("items").innerHTML = "<p>السلة فارغة</p>";
-    $("total").textContent = "";
-    $("formBox").style.display = "none";
-    return;
-  }
-  $("formBox").style.display = "block";
-  $("items").innerHTML = cart.map((i,idx) => {
-    const p = PRODUCTS.find(x=>x.id===i.id);
-    return `<div class="item">
-      <div>${p.name} - موديل ${p.id}<br><small>المقاس: ${i.size}</small></div>
-      <div class="qty"><button onclick="changeQty(${idx},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${idx},1)">+</button></div>
-    </div>`;
-  }).join("");
-  $("total").textContent = "المجموع: " + fmt(total());
+function calc(){
+  const p = PRODUCTS.find(x=>x.id===cur.id);
+  const sub = p.price * cur.qty;
+  const dc = deliv ? DELIVERY[deliv].cost : 0;
+  return {p:p, sub:sub, dc:dc, total:sub+dc};
 }
 
-function openCart(){ renderCart(); $("overlay").style.display = "block"; }
-function closeCart(){ $("overlay").style.display = "none"; }
+function renderSummary(){
+  const c = calc();
+  $("sum").innerHTML = `
+    <div class="sumrow"><div>${c.p.name} - موديل ${c.p.id}<br><small>المقاس: ${cur.size}</small></div>
+      <div class="qty"><button onclick="changeQty(-1)">−</button><span>${cur.qty}</span><button onclick="changeQty(1)">+</button></div></div>
+    <div class="sumrow"><span>سعر المنتج</span><span>${fmt(c.sub)}</span></div>
+    <div class="sumrow"><span>التوصيل</span><span>${deliv ? fmt(c.dc) : "اختر نوع التوصيل"}</span></div>
+    <div class="total"><span>المجموع</span><span>${fmt(c.total)}</span></div>`;
+}
 
 function sendOrder(){
   const name = $("fname").value.trim();
   const phone = $("fphone").value.trim().replace(/\s/g,"");
   const wilaya = $("fwilaya").value;
   const addr = $("faddr").value.trim();
+  if(!deliv){ toast("اختر نوع التوصيل"); return; }
   if(!name){ toast("اكتب اسمك"); return; }
   if(!/^0[567][0-9]{8}$/.test(phone)){ toast("رقم الهاتف غير صحيح"); return; }
   if(!wilaya){ toast("اختر الولاية"); return; }
   if(!addr){ toast("اكتب العنوان"); return; }
 
-  const lines = cart.map(i => {
-    const p = PRODUCTS.find(x=>x.id===i.id);
-    return "- " + p.name + " موديل " + p.id + " | المقاس " + i.size + " | الكمية " + i.qty;
-  }).join("\n");
+  const c = calc();
   const msg = "طلب جديد - ELITE POLO\n\n" +
     "الاسم: " + name + "\nالهاتف: " + phone + "\nالولاية: " + wilaya + "\nالعنوان: " + addr +
-    "\n\nالطلبات:\n" + lines + "\n\nالمجموع: " + fmt(total()) + " (الدفع عند الاستلام)";
+    "\n\nالمنتج: " + c.p.name + " موديل " + c.p.id + "\nالمقاس: " + cur.size + "\nالكمية: " + cur.qty +
+    "\nسعر المنتج: " + fmt(c.sub) +
+    "\nالتوصيل إلى " + DELIVERY[deliv].label + ": " + fmt(c.dc) +
+    "\n\nالمجموع: " + fmt(c.total) + " (الدفع عند الاستلام)";
 
   if(SHEETS_URL){
     try{
-      fetch(SHEETS_URL, {method:"POST", mode:"no-cors", body: JSON.stringify({name:name, phone:phone, wilaya:wilaya, address:addr, order:lines, total:total()})});
+      fetch(SHEETS_URL, {method:"POST", mode:"no-cors", body: JSON.stringify({name:name, phone:phone, wilaya:wilaya, address:addr, product:c.p.name + " موديل " + c.p.id, size:cur.size, qty:cur.qty, delivery:DELIVERY[deliv].label, total:c.total})});
     }catch(e){}
   }
-  cart = []; updateCount();
   window.location.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
 }
 
