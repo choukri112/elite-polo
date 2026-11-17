@@ -1,56 +1,185 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ELITE POLO</title>
-  <style>
-    * { box-sizing:border-box; }
-    body { margin:0; font-family: Arial, sans-serif; background:#fff; color:#111; }
-    .promo { background:#111; color:#fff; text-align:center; font-size:13px; padding:8px; }
-    header { display:flex; justify-content:space-between; align-items:center;
-             padding:14px 16px; border-bottom:1px solid #eee; position:sticky; top:0; background:#fff; }
-    .logo { font-weight:bold; letter-spacing:4px; font-size:20px; }
-    .cart { font-size:14px; }
-    .hero { background:#f3f3f3; text-align:center; padding:56px 16px; }
-    .hero h2 { margin:0 0 8px; font-size:26px; }
-    .hero p { margin:0 0 20px; color:#666; }
-    .btn { display:inline-block; background:#111; color:#fff; padding:12px 28px; text-decoration:none; font-size:14px; }
-    .cats { display:flex; gap:8px; padding:16px; overflow-x:auto; }
-    .cats span { border:1px solid #ddd; padding:8px 16px; font-size:13px; white-space:nowrap; }
-    h3 { padding:0 16px; margin:8px 0 12px; }
-    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px 32px; }
-    .img { background:#eee; aspect-ratio:3/4; }
-    .name { font-size:13px; margin:8px 0 2px; }
-    .price { font-size:14px; font-weight:bold; }
-    footer { background:#f3f3f3; text-align:center; padding:24px 16px; font-size:13px; color:#666; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELITE POLO</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#111}
+.promo{background:#111;color:#fff;text-align:center;font-size:13px;padding:8px}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:5}
+.logo{font-weight:bold;letter-spacing:4px;font-size:20px}
+.cartbtn{background:none;border:1px solid #111;padding:8px 14px;font-size:14px;cursor:pointer}
+.hero{background:#f3f3f3;text-align:center;padding:44px 16px}
+.hero h2{margin:0 0 8px;font-size:26px}
+.hero p{margin:0;color:#666}
+h3{padding:0 16px;margin:24px 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 32px}
+.card img{width:100%;aspect-ratio:3/4;object-fit:cover;background:#eee;display:block}
+.name{font-size:13px;margin:8px 0 2px}
+.price{font-size:14px;font-weight:bold;margin-bottom:8px}
+.sizes{display:flex;gap:4px;margin-bottom:8px}
+.sz{flex:1;padding:7px 0;border:1px solid #ccc;background:#fff;font-size:12px;cursor:pointer}
+.sz.on{background:#111;color:#fff;border-color:#111}
+.add{width:100%;padding:11px;background:#111;color:#fff;border:0;font-size:13px;cursor:pointer}
+footer{background:#f3f3f3;text-align:center;padding:24px 16px;font-size:13px;color:#666}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20}
+.sheet{position:absolute;bottom:0;left:0;right:0;background:#fff;max-height:92vh;overflow:auto;padding:16px}
+.sheet h4{margin:0 0 12px;font-size:18px}
+.close{float:left;background:none;border:0;font-size:22px;cursor:pointer}
+.item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding:10px 0;font-size:14px}
+.qty button{width:28px;height:28px;border:1px solid #ccc;background:#fff;font-size:16px}
+.qty span{display:inline-block;min-width:24px;text-align:center}
+.total{font-weight:bold;margin:12px 0;font-size:16px}
+input,select{width:100%;padding:12px;margin:0 0 10px;border:1px solid #ccc;font-size:15px;background:#fff}
+.confirm{width:100%;padding:14px;background:#111;color:#fff;border:0;font-size:15px;cursor:pointer}
+.note{font-size:12px;color:#777;margin:8px 0 0;text-align:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;font-size:13px;display:none;z-index:30}
+</style>
 </head>
 <body>
-  <div class="promo">الدفع عند الاستلام · التوصيل لكل الولايات</div>
-  <header>
-    <div class="logo">ELITE POLO</div>
-    <div class="cart">السلة (0)</div>
-  </header>
+<div class="promo">الدفع عند الاستلام · التوصيل لكل الولايات</div>
+<header>
+  <div class="logo">ELITE POLO</div>
+  <button class="cartbtn" onclick="openCart()">السلة (<span id="count">0</span>)</button>
+</header>
+<section class="hero">
+  <h2>أناقة بسيطة. جودة تدوم.</h2>
+  <p>تشكيلة بولو جديدة</p>
+</section>
+<h3>وصل حديثاً</h3>
+<div class="grid" id="grid"></div>
+<footer>© ELITE POLO — جميع الحقوق محفوظة</footer>
 
-  <section class="hero">
-    <h2>أناقة بسيطة. جودة تدوم.</h2>
-    <p>تشكيلة جديدة من القمصان والبولو</p>
-    <a class="btn" href="#products">تسوّق الآن</a>
-  </section>
-
-  <div class="cats">
-    <span>الكل</span><span>بولو</span><span>قمصان</span><span>تيشيرتات</span>
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <button class="close" onclick="closeCart()">✕</button>
+    <h4>سلتك</h4>
+    <div id="items"></div>
+    <div class="total" id="total"></div>
+    <div id="formBox">
+      <input id="fname" placeholder="الاسم الكامل">
+      <input id="fphone" placeholder="رقم الهاتف (مثال: 0555123456)" inputmode="tel">
+      <select id="fwilaya"><option value="">اختر الولاية</option></select>
+      <input id="faddr" placeholder="العنوان الكامل / البلدية">
+      <button class="confirm" onclick="sendOrder()">تأكيد الطلب</button>
+      <p class="note">الدفع عند الاستلام. سيصلك تأكيد الطلب على واتساب.</p>
+    </div>
   </div>
+</div>
+<div class="toast" id="toast"></div>
 
-  <h3 id="products">وصل حديثاً</h3>
-  <div class="grid">
-    <div><div class="img"></div><div class="name">بولو كلاسيك أبيض</div><div class="price">3,500 دج</div></div>
-    <div><div class="img"></div><div class="name">بولو كلاسيك أسود</div><div class="price">3,500 دج</div></div>
-    <div><div class="img"></div><div class="name">قميص كلاسيك أزرق</div><div class="price">4,200 دج</div></div>
-    <div><div class="img"></div><div class="name">قميص كلاسيك رمادي</div><div class="price">4,200 دج</div></div>
-  </div>
+<script>
+const WHATSAPP = "213772342854";
+const SHEETS_URL = "";
+const SIZES = ["S","M","L","XL"];
+const PRODUCTS = [
+  {id:1, name:"Polo Eden Park", img:"IMG_20261013_172028_828.jpg", price:5500},
+  {id:2, name:"Polo Eden Park", img:"IMG_20261013_172029_114.jpg", price:5500},
+  {id:3, name:"Polo Eden Park", img:"IMG_20261013_172052_857.jpg", price:5500},
+  {id:4, name:"Polo Eden Park", img:"IMG_20261013_172227.jpg", price:5500}
+];
+const WILAYAS = ["أدرار","الشلف","الأغواط","أم البواقي","باتنة","بجاية","بسكرة","بشار","البليدة","البويرة","تمنراست","تبسة","تلمسان","تيارت","تيزي وزو","الجزائر","الجلفة","جيجل","سطيف","سعيدة","سكيكدة","سيدي بلعباس","عنابة","قالمة","قسنطينة","المدية","مستغانم","المسيلة","معسكر","ورقلة","وهران","البيض","إليزي","برج بوعريريج","بومرداس","الطارف","تندوف","تيسمسيلت","الوادي","خنشلة","سوق أهراس","تيبازة","ميلة","عين الدفلى","النعامة","عين تموشنت","غرداية","غليزان","تيميمون","برج باجي مختار","أولاد جلال","بني عباس","عين صالح","عين قزام","تقرت","جانت","المغير","المنيعة"];
 
-  <footer>© ELITE POLO — جميع الحقوق محفوظة</footer>
+let cart = [];
+const sel = {};
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("en-US") + " دج";
+
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.style.display = "block";
+  setTimeout(()=>{ t.style.display = "none"; }, 1800);
+}
+
+function renderProducts(){
+  $("grid").innerHTML = PRODUCTS.map(p => `
+    <div class="card">
+      <img src="${p.img}" alt="${p.name}">
+      <div class="name">${p.name} - موديل ${p.id}</div>
+      <div class="price">${fmt(p.price)}</div>
+      <div class="sizes">
+        ${SIZES.map(s => `<button class="sz ${sel[p.id]===s?"on":""}" onclick="pick(${p.id},'${s}')">${s}</button>`).join("")}
+      </div>
+      <button class="add" onclick="addToCart(${p.id})">أضف إلى السلة</button>
+    </div>`).join("");
+}
+
+function pick(id, s){ sel[id] = s; renderProducts(); }
+
+function addToCart(id){
+  if(!sel[id]){ toast("اختر المقاس أولاً"); return; }
+  const found = cart.find(i => i.id===id && i.size===sel[id]);
+  if(found){ found.qty++; } else { cart.push({id:id, size:sel[id], qty:1}); }
+  updateCount(); toast("تمت الإضافة إلى السلة");
+}
+
+function updateCount(){ $("count").textContent = cart.reduce((a,i)=>a+i.qty,0); }
+
+function changeQty(index, d){
+  cart[index].qty += d;
+  if(cart[index].qty <= 0){ cart.splice(index,1); }
+  updateCount(); renderCart();
+}
+
+function total(){
+  return cart.reduce((a,i)=> a + PRODUCTS.find(p=>p.id===i.id).price * i.qty, 0);
+}
+
+function renderCart(){
+  if(cart.length === 0){
+    $("items").innerHTML = "<p>السلة فارغة</p>";
+    $("total").textContent = "";
+    $("formBox").style.display = "none";
+    return;
+  }
+  $("formBox").style.display = "block";
+  $("items").innerHTML = cart.map((i,idx) => {
+    const p = PRODUCTS.find(x=>x.id===i.id);
+    return `<div class="item">
+      <div>${p.name} - موديل ${p.id}<br><small>المقاس: ${i.size}</small></div>
+      <div class="qty"><button onclick="changeQty(${idx},-1)">−</button><span>${i.qty}</span><button onclick="changeQty(${idx},1)">+</button></div>
+    </div>`;
+  }).join("");
+  $("total").textContent = "المجموع: " + fmt(total());
+}
+
+function openCart(){ renderCart(); $("overlay").style.display = "block"; }
+function closeCart(){ $("overlay").style.display = "none"; }
+
+function sendOrder(){
+  const name = $("fname").value.trim();
+  const phone = $("fphone").value.trim().replace(/\s/g,"");
+  const wilaya = $("fwilaya").value;
+  const addr = $("faddr").value.trim();
+  if(!name){ toast("اكتب اسمك"); return; }
+  if(!/^0[567][0-9]{8}$/.test(phone)){ toast("رقم الهاتف غير صحيح"); return; }
+  if(!wilaya){ toast("اختر الولاية"); return; }
+  if(!addr){ toast("اكتب العنوان"); return; }
+
+  const lines = cart.map(i => {
+    const p = PRODUCTS.find(x=>x.id===i.id);
+    return "- " + p.name + " موديل " + p.id + " | المقاس " + i.size + " | الكمية " + i.qty;
+  }).join("\n");
+  const msg = "طلب جديد - ELITE POLO\n\n" +
+    "الاسم: " + name + "\nالهاتف: " + phone + "\nالولاية: " + wilaya + "\nالعنوان: " + addr +
+    "\n\nالطلبات:\n" + lines + "\n\nالمجموع: " + fmt(total()) + " (الدفع عند الاستلام)";
+
+  if(SHEETS_URL){
+    try{
+      fetch(SHEETS_URL, {method:"POST", mode:"no-cors", body: JSON.stringify({name:name, phone:phone, wilaya:wilaya, address:addr, order:lines, total:total()})});
+    }catch(e){}
+  }
+  cart = []; updateCount();
+  window.location.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
+}
+
+WILAYAS.forEach((w,i) => {
+  const o = document.createElement("option");
+  o.value = w; o.textContent = (i+1) + " - " + w;
+  $("fwilaya").appendChild(o);
+});
+renderProducts();
+</script>
 </body>
 </html>
